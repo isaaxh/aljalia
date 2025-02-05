@@ -60,9 +60,7 @@ function LoginPage() {
   }, [FIREBASE_AUTH]);
 
   return (
-    <>
-      <h1>Testing otp input</h1>
-
+    <div className="flex flex-1 justify-center items-center">
       {!confirmationResult && <PhoneNumberForm />}
 
       {/* <InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS}> */}
@@ -82,7 +80,7 @@ function LoginPage() {
       {/* <Button>Submit</Button> */}
 
       <div id="recaptcha-container" />
-    </>
+    </div>
   );
 }
 
