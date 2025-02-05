@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useRouter } from "next/navigation";
-import { FIREBASE_AUTH } from "../../firebase";
 import PhoneNumberForm from "./PhoneNumberForm";
+import { FIREBASE_AUTH } from "@/lib/firebase.client";
 
 function OtpLogin() {
   const router = useRouter();
