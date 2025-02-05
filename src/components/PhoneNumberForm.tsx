@@ -2,9 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { isValidPhoneNumber } from "react-phone-number-input";
 import { z } from "zod";
 
-import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,23 +15,25 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { toast } from "@/hooks/use-toast";
+import { PhoneInput } from "./PhoneInput";
 
 const FormSchema = z.object({
-  phoneNumber: z.number().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+  phone: z
+    .string()
+    .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
 });
 
-export function LoginForm() {
+export default function Hero() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      phoneNumber: 0,
+      phone: "",
     },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log(data);
     toast({
       title: "You submitted the following values:",
       description: (
@@ -44,19 +46,25 @@ export function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col items-start space-y-8"
+      >
         <FormField
           control={form.control}
-          name="phoneNumber"
+          name="phone"
           render={({ field }) => (
-            <FormItem>
-              {/* <FormLabel></FormLabel> */}
-              <FormControl>
-                <Input placeholder="Enter phone number" {...field} />
+            <FormItem className="flex flex-col items-start">
+              <FormLabel className="text-left">Phone Number</FormLabel>
+              <FormControl className="w-full">
+                <PhoneInput
+                  placeholder="Enter a phone number"
+                  defaultCountry="SA"
+                  {...field}
+                />
               </FormControl>
-              <FormDescription className="px-1">
-                Please enter phone number to login, make sure the phone number
-                starts with country code i.e. (+966)
+              <FormDescription className="text-left">
+                Enter a phone number (exp. +966 50 689...)
               </FormDescription>
               <FormMessage />
             </FormItem>
