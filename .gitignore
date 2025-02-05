@@ -33,6 +33,8 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 .env.local
+al-jalia-firebase-adminsdk-fbsvc-c9ac23f7e9.json
+
 
 # vercel
 .vercel

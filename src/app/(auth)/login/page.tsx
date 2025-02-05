@@ -15,7 +15,7 @@ import {
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useRouter } from "next/navigation";
 import PhoneNumberForm from "@/components/PhoneNumberForm";
-import { FIREBASE_AUTH } from "../../../../firebase";
+import { FIREBASE_AUTH } from "@/lib/firebase.client";
 
 function LoginPage() {
   const router = useRouter();
