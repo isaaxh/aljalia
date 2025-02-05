@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
+import HomeFooter from "@/components/HomeFooter";
+import HomeHeader from "@/components/HomeHeader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,9 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col`}
       >
+        <HomeHeader />
         {children}
+        <HomeFooter />
       </body>
     </html>
   );
