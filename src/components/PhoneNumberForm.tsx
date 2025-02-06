@@ -24,7 +24,17 @@ const FormSchema = z.object({
     .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
 });
 
-export default function Hero() {
+type PhoneNumberFormTypes = {
+  requestOtpAction: () => {};
+  isPending: boolean;
+  resendCountdown: number;
+};
+
+export default function PhoneNumberForm({
+  requestOtpAction,
+  isPending,
+  resendCountdown,
+}: PhoneNumberFormTypes) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -32,8 +42,12 @@ export default function Hero() {
     },
   });
 
+  const { watch } = form;
+  const phoneValue = watch("phone");
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data);
+    requestOtpAction();
     toast({
       title: "You submitted the following values:",
       description: (
@@ -70,7 +84,16 @@ export default function Hero() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button
+          type="submit"
+          disabled={!phoneValue || isPending || resendCountdown > 0}
+        >
+          {resendCountdown > 0
+            ? `Resend OTP in ${resendCountdown}`
+            : isPending
+            ? "Sending OTP"
+            : "Send OTP"}
+        </Button>
       </form>
     </Form>
   );

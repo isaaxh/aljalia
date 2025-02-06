@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { collection, getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const clientCredentials = {
@@ -16,5 +16,18 @@ const clientCredentials = {
 const FIREBASE_APP = initializeApp(clientCredentials);
 
 // export auth and firestore
-export const FIREBASE_AUTH = getAuth(FIREBASE_APP);
-export const FIREBASE_DB = getFirestore(FIREBASE_APP);
+const FIREBASE_AUTH = getAuth(FIREBASE_APP);
+const FIREBASE_DB = getFirestore(FIREBASE_APP);
+
+const postsCollection = collection(FIREBASE_DB, "posts");
+const commentsCollection = collection(FIREBASE_DB, "comments");
+const usersCollection = collection(FIREBASE_DB, "users");
+
+export {
+  FIREBASE_APP,
+  FIREBASE_AUTH,
+  FIREBASE_DB,
+  postsCollection,
+  commentsCollection,
+  usersCollection,
+};

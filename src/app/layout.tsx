@@ -4,6 +4,7 @@ import "./globals.css";
 import HomeFooter from "@/components/HomeFooter";
 import HomeHeader from "@/components/HomeHeader";
 import { Toaster } from "@/components/ui/toaster";
+import AuthProvider from "@/services/contexts/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,15 +27,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col`}
-      >
-        <HomeHeader />
-        {children}
-        <HomeFooter />
-        <Toaster />
-      </body>
-    </html>
+    <AuthProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col`}
+        >
+          <HomeHeader />
+          {children}
+          <HomeFooter />
+          <Toaster />
+        </body>
+      </html>
+    </AuthProvider>
   );
 }
