@@ -1,11 +1,7 @@
 "use client";
 
 import React, { FormEvent, useEffect, useState, useTransition } from "react";
-import {
-  ConfirmationResult,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-} from "firebase/auth";
+import { ConfirmationResult, RecaptchaVerifier, signOut } from "firebase/auth";
 import {
   InputOTP,
   InputOTPGroup,
@@ -14,14 +10,17 @@ import {
 } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useRouter } from "next/navigation";
-import PhoneNumberForm from "@/components/PhoneNumberForm";
 import { FIREBASE_AUTH } from "@/lib/firebase.client";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/loadingSpinner";
 import { Input } from "@/components/ui/input";
+import { requestOtp, storeUserToken, verifyOtp } from "@/lib/firebaseAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 function LoginPage() {
   const router = useRouter();
+
+  const { user } = useAuth();
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
@@ -63,34 +62,12 @@ function LoginPage() {
   }, [FIREBASE_AUTH]);
 
   useEffect(() => {
-    const hasEnteredAllDigits = otp.length === 6;
-    if (hasEnteredAllDigits) {
-      console.log(otp);
-      verifyOtp();
+    if (otp.length === 6) {
+      handleVerifyOtp();
     }
   }, [otp]);
 
-  const verifyOtp = async () => {
-    startTransition(async () => {
-      setError("");
-
-      if (!confirmationResult) {
-        setError("Please request OTP first.");
-        return;
-      }
-
-      try {
-        await confirmationResult.confirm(otp);
-        setSuccess("Login successful");
-        router.replace("/dashboard");
-      } catch (error) {
-        console.log(error);
-        setError("Failed to verify OTP. Please check the OTP.");
-      }
-    });
-  };
-
-  const requestOtp = async (e?: FormEvent<HTMLFormElement>) => {
+  const handleRequestOtp = async (e?: FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
 
     setResendCountdown(60);
@@ -101,26 +78,34 @@ function LoginPage() {
       if (!recaptchaVerifier) {
         return setError("RecaptchaVerifier is not initialized.");
       }
-      try {
-        const confirmationResult = await signInWithPhoneNumber(
-          FIREBASE_AUTH,
-          phoneNumber,
-          recaptchaVerifier,
-        );
 
-        setConfirmationResult(confirmationResult);
+      try {
+        const result = await requestOtp(phoneNumber, recaptchaVerifier);
+        setConfirmationResult(result);
+
         setSuccess("OTP sent successfully.");
       } catch (error: any) {
-        console.log(error);
+        setError(error.message);
         setResendCountdown(0);
+      }
+    });
+  };
 
-        if (error.code === "auth/invalid-phone-number") {
-          setError("Invalid phone number. Please check your number");
-        } else if (error.code === "auth/too-many-requests") {
-          setError("Too many requests. Please try again later");
-        } else {
-          setError("Failed to send OTP. Please try again");
-        }
+  const handleVerifyOtp = async () => {
+    startTransition(async () => {
+      if (!confirmationResult) {
+        setError("Please request OTP first.");
+        return;
+      }
+
+      setError("");
+
+      try {
+        await verifyOtp(confirmationResult, otp);
+        setSuccess("Login successful");
+        router.replace("/dashboard");
+      } catch (error) {
+        setError("Failed to verify OTP. Please check the OTP.");
       }
     });
   };
@@ -128,7 +113,7 @@ function LoginPage() {
   return (
     <div className="flex flex-col flex-1 justify-center items-center">
       {!confirmationResult && (
-        <form onSubmit={requestOtp}>
+        <form onSubmit={handleRequestOtp}>
           <Input
             className="text-black"
             type="tel"
@@ -166,7 +151,7 @@ function LoginPage() {
         type="submit"
         disabled={!phoneNumber || isPending || resendCountdown > 0}
         className="mt-5"
-        onClick={() => requestOtp()}
+        onClick={() => handleRequestOtp()}
       >
         {resendCountdown > 0
           ? `Resend OTP in ${resendCountdown}`
@@ -181,6 +166,10 @@ function LoginPage() {
       </div>
 
       {isPending && <LoadingSpinner />}
+
+      {user && `user: ${JSON.stringify(user.uid)}`}
+
+      {user && <Button onClick={() => signOut(FIREBASE_AUTH)}>Sign out</Button>}
 
       <div id="recaptcha-container" />
     </div>

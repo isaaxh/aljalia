@@ -9,9 +9,14 @@ import React from "react";
 function Dashboard() {
   const { user } = useAuth();
   return (
-    <div>
+    <div className="flex flex-col flex-1 justify-center items-center">
       <h1>Welcome to the dashboard</h1>
-      {user && <Button onClick={() => signOut(FIREBASE_AUTH)}>Sign out</Button>}
+      <div>user uid: {user?.uid}</div>
+      {user && (
+        <Button className="mt-5" onClick={() => signOut(FIREBASE_AUTH)}>
+          Sign out
+        </Button>
+      )}
     </div>
   );
 }
