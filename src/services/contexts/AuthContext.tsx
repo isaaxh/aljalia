@@ -40,7 +40,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const logOut = () => {
     signOut(FIREBASE_AUTH);
     setDecodedUser(null);
-    deleteUserToken(token);
+    deleteUserToken();
     router.replace("/");
   };
 

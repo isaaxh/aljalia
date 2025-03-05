@@ -5,10 +5,16 @@ import { useAuth } from "@/hooks/useAuth";
 import React from "react";
 import { useCheckAuth } from "@/hooks/useCheckAuth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function Dashboard() {
   const { user, logOut } = useAuth();
-  const { decodedUser } = useCheckAuth();
+  const { decodedUser, loading } = useCheckAuth();
+  const router = useRouter();
+
+  if (!loading && !decodedUser) {
+    logOut();
+  }
 
   return (
     <div className="flex flex-col flex-1 justify-center items-center">
