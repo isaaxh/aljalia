@@ -18,6 +18,7 @@ const requestOtp = async (
 
     return confirmationResult;
   } catch (error: any) {
+    console.error("requestOTP Error: ", error);
     throw new Error(
       error.code === "auth/invalid-phone-number"
         ? "Invalid phone number. Please check your number."
@@ -49,8 +50,11 @@ async function storeUserToken(
 
   const token = await userCredential.user.getIdToken();
 
-  // Store token in a cookie
   document.cookie = `authToken=${token}; path=/;`;
 }
 
-export { verifyOtp, requestOtp, storeUserToken };
+function deleteUserToken() {
+  document.cookie = `authToken=${""}; path=/;`;
+}
+
+export { verifyOtp, requestOtp, storeUserToken, deleteUserToken };

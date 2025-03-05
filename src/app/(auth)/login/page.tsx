@@ -14,13 +14,10 @@ import { FIREBASE_AUTH } from "@/lib/firebase.client";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/loadingSpinner";
 import { Input } from "@/components/ui/input";
-import { requestOtp, storeUserToken, verifyOtp } from "@/lib/firebaseAuth";
-import { useAuth } from "@/hooks/useAuth";
+import { requestOtp, verifyOtp } from "@/lib/firebaseAuth";
 
 function LoginPage() {
   const router = useRouter();
-
-  const { user } = useAuth();
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
@@ -167,19 +164,9 @@ function LoginPage() {
 
       {isPending && <LoadingSpinner />}
 
-      {user && `user: ${JSON.stringify(user.uid)}`}
-
-      {user && <Button onClick={() => signOut(FIREBASE_AUTH)}>Sign out</Button>}
-
       <div id="recaptcha-container" />
     </div>
   );
 }
 
 export default LoginPage;
-
-/* <PhoneNumberForm */
-/*   requestOtpAction={requestOtp} */
-/*   isPending={isPending} */
-/*   resendCountdown={resendCountdown} */
-/* /> */

@@ -5,6 +5,7 @@ import HomeFooter from "@/components/HomeFooter";
 import HomeHeader from "@/components/HomeHeader";
 import { Toaster } from "@/components/ui/toaster";
 import AuthProvider from "@/services/contexts/AuthContext";
+import { useCheckAuth } from "@/hooks/useCheckAuth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
