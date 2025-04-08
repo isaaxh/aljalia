@@ -1,5 +1,5 @@
 import { FIREBASE_DB } from '@/lib/firebase.client'
-import { doc, DocumentData, getDoc, setDoc, WithFieldValue } from 'firebase/firestore'
+import { doc, DocumentData, getDoc, setDoc, deleteDoc, WithFieldValue, getDocs, collection } from 'firebase/firestore'
 
 
 export const useFirestore = () => {
@@ -21,9 +21,21 @@ export const useFirestore = () => {
             return docSnap.data() as T
         }
     }
-    const getAllDocs = async () => { }
-    const deleteDoc = async () => { }
+
     const updateDoc = async () => { }
+
+    const getAllDocs = async <T>(collectionName: string): Promise<T[]> => {
+        const querySnapshot = await getDocs(collection(FIREBASE_DB, collectionName));
+        const documents: T[] = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        } as T))
+        return documents
+    }
+
+    const deleteDoc = async (collectionName: string, id: string) => {
+    }
+
 
     return { addDoc, getDocById, getAllDocs, deleteDoc, updateDoc }
 }
