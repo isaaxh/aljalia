@@ -1,3 +1,5 @@
+"use client";
+
 import { AuthContext } from "@/services/contexts/AuthContext";
 import { useContext } from "react";
 
