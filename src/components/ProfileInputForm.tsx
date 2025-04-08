@@ -14,6 +14,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { useFirestore } from "@/hooks/useFirestore";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(2).max(20),
@@ -21,6 +25,8 @@ const formSchema = z.object({
 });
 
 function ProfileInputForm() {
+  const router = useRouter();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -30,16 +36,37 @@ function ProfileInputForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    setLoading(true);
-    console.log("Submitting form...");
+  const { addDoc } = useFirestore();
+  const { user } = useAuth();
 
-    // Simulate a network request
-    setTimeout(() => {
-      console.log("Form submitted successfully!");
-      console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      setLoading(true);
+      if (!user) {
+        toast({
+          variant: "destructive",
+          title: "Uh-oh! You are not authenticated.",
+          description: `Please login to save your profile.`,
+        });
+        throw new Error("User not authenticated");
+      }
+      await addDoc("users", user?.uid, values);
+
+      toast({
+        description: `Profile saved successfully!`,
+      });
       setLoading(false);
-    }, 2000);
+      router.replace("/dashboard");
+    } catch (error) {
+      setLoading(false);
+      toast({
+        title: "Error",
+        description: "An error occurred while saving your data.",
+        variant: "destructive",
+      });
+      console.error("Error submitting form:", error);
+      throw new Error("Error saving profile");
+    }
   }
   return (
     <>
