@@ -66,7 +66,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
       try {
-        const data = await getDocById("users", user.uid);
+        const data = await getDocById<TUserData>("users", user.uid);
         setUserData(data);
         console.log(data);
       } catch (error) {

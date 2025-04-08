@@ -18,7 +18,7 @@ export const useFirestore = () => {
     }
 
 
-    const getDocById = async (collectionName: string, id: string): Promise<TUserData | null> => {
+    const getDocById = async <T>(collectionName: string, id: string): Promise<T | null> => {
         const docRef = doc(FIREBASE_DB, collectionName, id)
         const docSnap = await getDoc(docRef)
 
@@ -26,7 +26,7 @@ export const useFirestore = () => {
             console.log("No such document!");
             return null
         } else {
-            return docSnap.data() as TUserData
+            return docSnap.data() as T
         }
     }
     const getAllDocs = async () => { }
