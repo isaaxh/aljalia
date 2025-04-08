@@ -22,7 +22,7 @@ export const useFirestore = () => {
         }
     }
 
-    const modifyDoc = async (collectionName: string, id: string, fieldName: string, newValue: string) => {
+    const modifyDoc = async (collectionName: string, id: string, fieldName: string, newValue: string): Promise<void> => {
         const docRef = doc(FIREBASE_DB, collectionName, id);
 
         await updateDoc(docRef, {
