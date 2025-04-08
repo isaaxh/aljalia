@@ -1,18 +1,10 @@
 import { FIREBASE_DB } from '@/lib/firebase.client'
-import { TUserData } from '@/lib/types';
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { doc, DocumentData, getDoc, setDoc, WithFieldValue } from 'firebase/firestore'
 
-type AddDocProps = {
-    collectionName: string;
-    id: string;
-    data: {
-        [key: string]: any;
-    }
-}
 
 export const useFirestore = () => {
 
-    const addDoc = async (collectionName: string, id: string, data: any) => {
+    const addDoc = async <T extends DocumentData>(collectionName: string, id: string, data: WithFieldValue<T>) => {
         const docRef = doc(FIREBASE_DB, collectionName, id);
         await setDoc(docRef, data);
     }
