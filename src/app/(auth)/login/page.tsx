@@ -18,6 +18,7 @@ import { requestOtp, verifyOtp } from "@/lib/firebaseAuth";
 
 function LoginPage() {
   const router = useRouter();
+  const [presetNumber, setPresetNumber] = useState("+966502850922");
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
@@ -107,6 +108,11 @@ function LoginPage() {
     });
   };
 
+  const addPresetNumber = () => {
+    setPhoneNumber(presetNumber);
+    console.log("addPresetNumber");
+  };
+
   return (
     <div className="flex flex-col flex-1 justify-center items-center">
       {!confirmationResult && (
@@ -163,6 +169,15 @@ function LoginPage() {
       </div>
 
       {isPending && <LoadingSpinner />}
+
+      <Button
+        type="button"
+        disabled={isPending || resendCountdown > 0}
+        className="mt-5"
+        onClick={() => addPresetNumber()}
+      >
+        Preset Number
+      </Button>
 
       <div id="recaptcha-container" />
     </div>
