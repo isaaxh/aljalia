@@ -4,3 +4,10 @@ export type TUserData = {
     email: string;
     role: 'admin' | 'user';
 }
+
+
+export type TAdminList = TAdmin[]
+
+export type TAdmin = {
+    phoneNumber: string
+}
