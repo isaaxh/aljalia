@@ -2,7 +2,7 @@
 
 import { useFirestore } from "@/hooks/useFirestore";
 import { FIREBASE_AUTH } from "@/lib/firebase.client";
-import { deleteUserToken } from "@/lib/firebaseAuth";
+import { deleteUserToken } from "@/lib/firebaseAuthClient";
 import { TUserData } from "@/lib/types";
 import { DecodedIdToken } from "firebase-admin/auth";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
@@ -68,7 +68,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         const data = await getDocById<TUserData>("users", user.uid);
         setUserData(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching document:", error);
         setUserData(null);
