@@ -4,7 +4,7 @@ export async function middleware(req: NextRequest) {
   const token = req.cookies.get("authToken")?.value; // Extract token from cookies
 
   if (!token) {
-    console.log("middleware: no decoded token found");
+    console.log("middleware: no token found, redirecting to login.");
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
@@ -26,3 +26,17 @@ export const config = {
     "/profile",
   ],
 };
+
+const adminRoutes = [
+  "/admin/:path*",
+  "/appointments/:path*",
+  "/book-appointment",
+  "/dashboard",
+  "/profile",
+];
+const userRoutes = [
+  "/dashboard",
+  "/profile",
+  "/appointments/:path*",
+  "/book-appointment",
+];
