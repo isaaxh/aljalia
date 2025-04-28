@@ -1,7 +1,7 @@
 "use client";
 
 import React, { FormEvent, useEffect, useState, useTransition } from "react";
-import { ConfirmationResult, RecaptchaVerifier, signOut } from "firebase/auth";
+import { ConfirmationResult, RecaptchaVerifier } from "firebase/auth";
 import {
   InputOTP,
   InputOTPGroup,
@@ -14,7 +14,7 @@ import { FIREBASE_AUTH } from "@/lib/firebase.client";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/loadingSpinner";
 import { Input } from "@/components/ui/input";
-import { requestOtp, verifyOtp } from "@/lib/firebaseAuth";
+import { requestOtp, verifyOtp } from "@/lib/firebaseAuthClient";
 
 function LoginPage() {
   const router = useRouter();
@@ -49,7 +49,7 @@ function LoginPage() {
       "recaptcha-container",
       {
         size: "invisible",
-      },
+      }
     );
 
     setRecaptchaVerifier(recaptchaVerifier);
@@ -110,20 +110,19 @@ function LoginPage() {
 
   const addPresetNumber = () => {
     setPhoneNumber(presetNumber);
-    console.log("addPresetNumber");
   };
 
   return (
-    <div className="flex flex-col flex-1 justify-center items-center">
+    <div className='flex flex-col flex-1 justify-center items-center'>
       {!confirmationResult && (
         <form onSubmit={handleRequestOtp}>
           <Input
-            className="text-black"
-            type="tel"
+            className='text-black'
+            type='tel'
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
-          <p className="text-xs text-gray-400 mt-2">
+          <p className='text-xs text-gray-400 mt-2'>
             Please enter your phone number with country code (i.e. +966 for SA)
           </p>
         </form>
@@ -151,9 +150,9 @@ function LoginPage() {
         </InputOTP>
       )}
       <Button
-        type="submit"
+        type='submit'
         disabled={!phoneNumber || isPending || resendCountdown > 0}
-        className="mt-5"
+        className='mt-5'
         onClick={() => handleRequestOtp()}
       >
         {resendCountdown > 0
@@ -163,23 +162,23 @@ function LoginPage() {
           : "Send OTP"}
       </Button>
 
-      <div className="p-10 text-center">
-        {error && <p className="text-red-500">{error}</p>}
-        {success && <p className="text-green-500">{success}</p>}
+      <div className='p-10 text-center'>
+        {error && <p className='text-red-500'>{error}</p>}
+        {success && <p className='text-green-500'>{success}</p>}
       </div>
 
       {isPending && <LoadingSpinner />}
 
       <Button
-        type="button"
+        type='button'
         disabled={isPending || resendCountdown > 0}
-        className="mt-5"
+        className='mt-5'
         onClick={() => addPresetNumber()}
       >
         Preset Number
       </Button>
 
-      <div id="recaptcha-container" />
+      <div id='recaptcha-container' />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import HomeHeader from "@/components/HomeHeader";
 import { Toaster } from "@/components/ui/toaster";
 import AuthProvider from "@/services/contexts/AuthContext";
 import { useCheckAuth } from "@/hooks/useCheckAuth";
+import GlobalProvider from "@/services/contexts/GlobalContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,19 +30,21 @@ export default function RootLayout({
 }>) {
   return (
     <AuthProvider>
-      <html lang="en">
-        <head>
-          <script src="http://localhost:8097"></script>
-        </head>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col`}
-        >
-          <HomeHeader />
-          {children}
-          <HomeFooter />
-          <Toaster />
-        </body>
-      </html>
+      <GlobalProvider>
+        <html lang='en'>
+          <head>
+            <script src='http://localhost:8097'></script>
+          </head>
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col`}
+          >
+            <HomeHeader />
+            {children}
+            <HomeFooter />
+            <Toaster />
+          </body>
+        </html>
+      </GlobalProvider>
     </AuthProvider>
   );
 }

@@ -1,7 +1,13 @@
+"use client";
+import ProfileInputForm from "@/components/ProfileInputForm";
 import React from "react";
 
-function Profile() {
-  return <div>Profile</div>;
+function ProfilePage() {
+  return (
+    <div className='flex flex-col items-center mt-10 w-full h-full'>
+      <ProfileInputForm />
+    </div>
+  );
 }
 
-export default Profile;
+export default ProfilePage;

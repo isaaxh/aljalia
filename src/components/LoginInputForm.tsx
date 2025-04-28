@@ -35,8 +35,8 @@ export function LoginForm() {
     toast({
       title: "You submitted the following values:",
       description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+          <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),
     });
@@ -44,17 +44,17 @@ export function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className='w-2/3 space-y-6'>
         <FormField
           control={form.control}
-          name="phoneNumber"
+          name='phoneNumber'
           render={({ field }) => (
             <FormItem>
               {/* <FormLabel></FormLabel> */}
               <FormControl>
-                <Input placeholder="Enter phone number" {...field} />
+                <Input placeholder='Enter phone number' {...field} />
               </FormControl>
-              <FormDescription className="px-1">
+              <FormDescription className='px-1'>
                 Please enter phone number to login, make sure the phone number
                 starts with country code i.e. (+966)
               </FormDescription>
@@ -62,7 +62,7 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type='submit'>Submit</Button>
       </form>
     </Form>
   );
