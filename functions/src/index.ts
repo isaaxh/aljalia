@@ -1,30 +1,43 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+// import * as v2 from 'firebase-functions/v2'
+import * as v1 from 'firebase-functions/v1'
 
-import { onRequest } from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+// type Indexable = { [key: string]: any }
 
-export const testingFirstFuction = onRequest((request, response) => {
-  logger.info("Hello logs!", { structuredData: true });
-  response.send("this is from the structuredData off!");
-});
+// // example 1 https request
+// export const helloworld = v2.https.onRequest((request, response) => {
+//     const name = request.params[0].replace('/', '')
+//     const items: Indexable = { lamp: 'this is a lamp', table: 'this is a table', chair: 'this is a chair' }
+//     const message = items[name]
 
-export const helloWorldTest = onRequest((request, response) => {
-  logger.info("Hello logs!", { structuredData: true });
-  response.send("this is the new message 2!");
-});
+//     response.send(`<h1>${message}</h1>`)
+// })
 
-export const toYouTube = onRequest((request, response) => {
-  logger.info("hello logs toYouTube", { structuredData: true });
-  console.log("hello from toYouTube");
-  response.redirect("https://www.youtube.com");
-});
+
+// // example 2 https request
+// export const testing = v2.https.onRequest((request, response) => {
+//     response.send(`<h1>testing new functions</h1>`)
+// })
+
+// // example 3 https request
+// export const toTheDojo = v2.https.onRequest((request, response) => {
+//     response.redirect('https://www.youtube.com')
+// })
+
+// // example 4 http callable functions
+// export const sayHello = v2.https.onCall(
+//     (data, context) => {
+//         return `hello my friends`
+//     })
+
+// example 5 background triggers auth trigger
+
+export const onUserCreate = v1.auth.user().onCreate((user) => {
+    console.log('user created', user.uid, user.phoneNumber)
+})
+
+
+export const onUserDelete = v1.auth.user().onDelete((user) => {
+    console.log('user delete', user.uid, user.phoneNumber)
+})
+
